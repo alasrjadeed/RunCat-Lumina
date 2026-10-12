@@ -1,0 +1,5 @@
+How to install on another PC:
+- Linux (recommended, no deps): Copy RunCat-Lumina-Linux-x86_64 to target, chmod +x and run it. Or use install-linux.sh.
+- Linux (portable tarball): Extract the Linux tar, bash scripts/linux/install.sh (or start.sh).
+- Windows: Extract Windows tar, run scripts\windows\install.bat.
+- macOS: Extract macOS tar, run bash scripts/macos/install.sh.

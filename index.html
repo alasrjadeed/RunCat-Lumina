@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RunCat Lumina</title>
+  <link rel="icon" type="image/png" href="cat/dark_cat_0.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="os-windows">
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <canvas id="brandCat" width="32" height="32" aria-hidden="true"></canvas>
+        <div>
+          <h1>RunCat Lumina</h1>
+          <p>Same original cat. Any color. Every desktop.</p>
+        </div>
+      </div>
+      <div class="cpu-chip" id="cpuChip">
+        <span class="cpu-label">CPU</span>
+        <span class="cpu-value" id="cpuValue">12%</span>
+      </div>
+    </header>
+
+    <main class="stage">
+      <section class="preview-card">
+        <div class="preview-meta">
+          <span>Live preview</span>
+          <span id="speedLabel">0.20s / frame</span>
+        </div>
+        <div class="os-switch" id="osSwitch">
+          <button type="button" class="os-btn active" data-os="windows">Windows</button>
+          <button type="button" class="os-btn" data-os="linux">Linux</button>
+          <button type="button" class="os-btn" data-os="macos">macOS</button>
+        </div>
+        <div class="track" id="track">
+          <canvas id="catCanvas" width="256" height="256"></canvas>
+        </div>
+        <p class="hint">Original cat sprite, recolored live. Speed follows CPU. Preview Windows, Linux, or macOS tray.</p>
+      </section>
+
+      <aside class="panel">
+        <h2>Cat color</h2>
+        <p class="panel-sub">Pick a preset or any custom color. The silhouette stays the original cat icon.</p>
+
+        <div class="preset-grid" id="presetGrid"></div>
+
+        <label class="custom-row">
+          <span>Custom color</span>
+          <div class="custom-controls">
+            <input type="color" id="colorPicker" value="#ffffff" aria-label="Custom cat color">
+            <input type="text" id="colorHex" value="#FFFFFF" maxlength="7" spellcheck="false" aria-label="Hex color">
+          </div>
+        </label>
+
+        <div class="swatch-row">
+          <div class="current-swatch" id="currentSwatch"></div>
+          <div>
+            <strong id="currentName">Original White</strong>
+            <span id="currentHex">#FFFFFF</span>
+          </div>
+        </div>
+
+        <h2>Run speed</h2>
+        <label class="slider-row">
+          <span>CPU usage</span>
+          <input type="range" id="cpuSlider" min="1" max="99" value="12">
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="autoCpu" checked>
+          <span>Auto simulate CPU load</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="positiveCorr" checked>
+          <span>Higher CPU, faster cat</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="darkBg" checked>
+          <span>Dark desktop</span>
+        </label>
+      </aside>
+    </main>
+
+    <footer class="desktop-bar" id="desktopBar">
+      <div class="bar-left">
+        <span class="os-mark" id="osMark">Win</span>
+        <span id="barTitle">RunCat Lumina</span>
+      </div>
+      <div class="tray">
+        <canvas id="trayCat" width="32" height="32" title="RunCat Lumina tray icon"></canvas>
+        <span class="clock" id="clock"></span>
+      </div>
+    </footer>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>

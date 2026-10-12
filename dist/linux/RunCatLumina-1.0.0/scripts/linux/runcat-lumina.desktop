@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=RunCat Lumina
+GenericName=CPU Cat
+Comment=Running cat on the Linux taskbar with custom colors
+Exec=runcat-lumina
+TryExec=runcat-lumina
+Icon=runcat-lumina
+Terminal=false
+Categories=Utility;Monitor;
+Keywords=cat;cpu;taskbar;tray;runcat;lumina;
+StartupNotify=false
+StartupWMClass=RunCat_Lumina

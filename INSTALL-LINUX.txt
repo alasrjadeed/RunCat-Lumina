@@ -1,0 +1,50 @@
+RunCat Lumina - Linux install
+
+Your project folder:
+
+  /home/oem/Documents/all project data /RunCat Lumina
+
+Easiest way to run (no install):
+
+  Double-click  "RunCat Lumina.desktop"  in this folder.
+
+  If your file manager refuses to run it, right-click it and pick
+  "Allow launching" / "Mark as trusted" once.
+
+Or from a terminal:
+
+  cd "/home/oem/Documents/all project data /RunCat Lumina"
+  bash start-linux.sh
+
+The quotes are required because the folder name has spaces.
+
+The launcher creates a local .venv and installs Pillow, psutil and pystray
+on first run, then starts the tray cat.
+
+Install it for daily use (adds it to the application menu):
+
+  cd "/home/oem/Documents/all project data /RunCat Lumina"
+  bash install.sh
+
+The installer will ask:
+  1. Install now?
+  2. Start when you log in?
+  3. Start now?
+
+After install, start anytime with:
+
+  runcat-lumina
+
+or launch "RunCat Lumina" from your application menu.
+
+A single .desktop entry is also installed at:
+  ~/.local/share/applications/runcat-lumina.desktop
+
+Notes:
+  - The cat lives in the system tray / panel. On GNOME you may need an
+    AppIndicator extension for it to show.
+  - Click the cat to open the Settings window: colors, dark mode, CPU usage
+    and a Quit button. (Linux tray icons have no right-click menu.)
+  - The tooltip shows the live CPU usage, e.g. "RunCat Lumina - CPU 42%".
+  - Run it only once. A second launch opens the Settings window of the
+    running instance instead of starting a duplicate.
