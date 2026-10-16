@@ -21,15 +21,14 @@ echo "Wrote packaging/macos/AppIcon.icns"
 
 PYEXE="$(python3 -c 'import sys; print(sys.executable)')"
 ARCHS="$(lipo -archs "$PYEXE")"
-case "$ARCHS" in
-  *arm64*x86_64*|*x86_64*arm64*) APP_ARCH="universal2" ;;
-  *arm64*)                       APP_ARCH="arm64" ;;
-  *)                             APP_ARCH="x86_64" ;;
-esac
+# Dependencies ship per-arch wheels (Pillow's _avif.so is not a fat binary), so
+# a universal2 bundle cannot be assembled from them. Build for the native arch.
+APP_ARCH="$(uname -m)"
 echo "Python architectures: $ARCHS -> building $APP_ARCH"
 
-# --target-arch is a makespec-only flag, so the spec reads it from the environment.
-export PYI_TARGET_ARCH="$APP_ARCH"
+# --target-arch is a makespec-only flag, so the spec reads it from the
+# environment. Empty means "native architecture".
+export PYI_TARGET_ARCH=""
 
 python3 -m PyInstaller --noconfirm --clean \
     --distpath "$OUT/app" --workpath "$BUILD/work" \
