@@ -87,9 +87,10 @@ function Find-SdkTool {
 
 # --- Version ---------------------------------------------------------------
 if (-not $Version) {
-    $raw = (Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()
-    $Version = if ($raw -match '^\d+\.\d+\.\d+$') { "$raw.0" } else { $raw }
+    $Version = (Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()
 }
+# The MSIX manifest requires four parts: 1.2.3 -> 1.2.3.0
+if ($Version -match '^\d+\.\d+\.\d+$') { $Version = '{0}.0' -f $Version }
 if ($Version -notmatch '^\d+\.\d+\.\d+\.\d+$') {
     throw "Version '$Version' is not a four-part version (x.y.z.w)."
 }
