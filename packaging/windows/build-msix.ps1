@@ -8,7 +8,7 @@
       2. Stage folder: RunCat-Lumina.exe + AppxManifest.xml + Assets\
       3. makeappx pack  -> RunCatLumina-<version>-x64.msix
       4. Self-signed certificate (matching the manifest Publisher)
-      5. signtool sign  -> package ready for local install / Partner Center upload
+         + signtool sign -> package ready for local install / Partner Center upload
 
     Requires: Python 3.9+ with pyinstaller (pip install pyinstaller -r requirements.txt)
     Requires: Windows SDK (makeappx.exe, signtool.exe) - installed with
@@ -117,7 +117,7 @@ if (-not $pyinstaller) {
     if ($LASTEXITCODE -ne 0) { throw 'pip install pyinstaller failed.' }
 }
 
-Write-Host 'Step 1/5: PyInstaller (store spec)...' -ForegroundColor Cyan
+Write-Host 'Step 1/4: PyInstaller (store spec)...' -ForegroundColor Cyan
 $distStore = Join-Path $Root 'dist\store'
 $buildStore = Join-Path $Root 'build\store'
 if (Test-Path $distStore) { Remove-Item $distStore -Recurse -Force }
@@ -133,7 +133,7 @@ $exePath = Join-Path $distStore 'RunCat-Lumina.exe'
 if (-not (Test-Path $exePath)) { throw "Expected executable not found: $exePath" }
 
 # --- Stage -----------------------------------------------------------------
-Write-Host 'Step 2/5: Staging package layout...' -ForegroundColor Cyan
+Write-Host 'Step 2/4: Staging package layout...' -ForegroundColor Cyan
 $stage = Join-Path $Root 'build\msix-stage'
 if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 New-Item -ItemType Directory -Path $stage -Force | Out-Null
@@ -146,7 +146,7 @@ $manifest = $manifest.Replace('{{PUBLISHER}}', $Publisher).Replace('{{VERSION}}'
 Set-Content -Path (Join-Path $stage 'AppxManifest.xml') -Value $manifest -Encoding utf8
 
 # --- Pack ------------------------------------------------------------------
-Write-Host 'Step 3/5: makeappx pack...' -ForegroundColor Cyan
+Write-Host 'Step 3/4: makeappx pack...' -ForegroundColor Cyan
 $makeappx = Find-SdkTool 'makeappx.exe'
 $outDir = Join-Path $Root 'dist\msix'
 New-Item -ItemType Directory -Path $outDir -Force | Out-Null
@@ -159,7 +159,7 @@ if ($LASTEXITCODE -ne 0) { throw 'makeappx pack failed.' }
 
 # --- Certificate + sign ----------------------------------------------------
 if (-not $NoSign) {
-    Write-Host 'Step 4/5: Signing...' -ForegroundColor Cyan
+    Write-Host 'Step 4/4: Signing...' -ForegroundColor Cyan
     $cert = Get-ChildItem Cert:\CurrentUser\My |
         Where-Object {
             $_.Subject -eq $Publisher -and
@@ -197,13 +197,10 @@ if (-not $NoSign) {
     }
 } else {
     $cerPath = $null
-    Write-Host 'Step 4/5: Skipped signing (-NoSign).' -ForegroundColor Yellow
+    Write-Host 'Step 4/4: Skipped signing (-NoSign).' -ForegroundColor Yellow
 }
 
-# --- Validate --------------------------------------------------------------
-Write-Host 'Step 5/5: Validating package...' -ForegroundColor Cyan
-& $makeappx validate /p $msixPath
-if ($LASTEXITCODE -ne 0) { throw 'makeappx validate failed.' }
+# Package validation happens inside makeappx pack (schema errors fail step 3).
 
 Write-Host ''
 Write-Host "OK  $msixPath" -ForegroundColor Green
