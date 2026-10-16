@@ -8,10 +8,13 @@
 #   python3 packaging/macos/make_icon.py
 #   iconutil -c icns build/macos/iconset -o packaging/macos/AppIcon.icns
 from pathlib import Path
+import os
 
 ROOT = Path(SPECPATH).resolve().parents[1]
 VERSION = (ROOT / 'VERSION').read_text().strip()
 ICON = str(Path(SPECPATH) / 'AppIcon.icns')
+# Set by packaging/macos/build-macos.sh (arm64 / x86_64 / universal2).
+TARGET_ARCH = os.environ.get('PYI_TARGET_ARCH') or None
 
 a = Analysis(
     [str(ROOT / 'main.py')],
@@ -44,7 +47,7 @@ exe = EXE(
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
-    target_arch=None,
+    target_arch=TARGET_ARCH,
     codesign_identity=None,
     entitlements_file=None,
     icon=ICON,

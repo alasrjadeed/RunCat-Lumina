@@ -28,9 +28,11 @@ case "$ARCHS" in
 esac
 echo "Python architectures: $ARCHS -> building $APP_ARCH"
 
+# --target-arch is a makespec-only flag, so the spec reads it from the environment.
+export PYI_TARGET_ARCH="$APP_ARCH"
+
 python3 -m PyInstaller --noconfirm --clean \
     --distpath "$OUT/app" --workpath "$BUILD/work" \
-    --target-arch "$APP_ARCH" \
     packaging/macos/RunCat-Lumina.macos.spec
 
 APP="$OUT/app/RunCat Lumina.app"
