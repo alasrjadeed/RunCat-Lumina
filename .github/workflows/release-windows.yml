@@ -80,6 +80,10 @@ jobs:
             gh release upload "$TAG" dist/installer/*.exe --clobber
           else
             gh release create "$TAG" dist/installer/*.exe \
-              --title "$(tr -d '[:space:]' < VERSION)" \
+              --title "RunCat Lumina $(tr -d '[:space:]' < VERSION)" \
               --generate-notes
           fi
+          # Never leave the release as a draft (re-creating a tag re-drafts it).
+          RID=$(gh release view "$TAG" --json databaseId -q .databaseId)
+          gh api -X PATCH "repos/${{ github.repository }}/releases/$RID" -F draft=false >/dev/null
+          echo "Release $TAG ready:"; gh release view "$TAG" --json name,isDraft,url -q '.name + " draft=" + (.isDraft|tostring) + " " + .url'
