@@ -1,0 +1,51 @@
+name: msix
+
+on:
+  workflow_dispatch:
+    inputs:
+      publisher:
+        description: "Exact Partner Center Publisher string (e.g. CN=guid). Leave empty for local test cert."
+        required: false
+        default: "CN=AL ASAR JADEED"
+      version:
+        description: "Four-part version (empty = VERSION file)"
+        required: false
+        default: ""
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Run tests
+        run: python tests/run_tests.py
+
+      - name: Build MSIX
+        shell: pwsh
+        run: |
+          $pub = "${{ inputs.publisher }}"
+          if (-not $pub) { $pub = "CN=AL ASAR JADEED" }
+          $scriptArgs = @('-Publisher', $pub)
+          $ver = "${{ inputs.version }}"
+          if ($ver) { $scriptArgs += @('-Version', $ver) }
+          ./packaging/windows/build-msix.ps1 @scriptArgs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RunCatLumina-msix
+          path: |
+            dist/msix/*.msix
+            dist/msix/*.cer
+          if-no-files-found: error

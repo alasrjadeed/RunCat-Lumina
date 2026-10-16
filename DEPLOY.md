@@ -59,6 +59,32 @@ scripts\windows\package.bat
 
 That creates `dist\windows\RunCatLumina-VERSION-windows.zip`.
 
+## Microsoft Store (MSIX)
+
+Build the Microsoft Store package (Windows only):
+
+```bat
+scripts\windows\build-msix.bat
+```
+
+or, with your Partner Center Publisher string:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File packaging\windows\build-msix.ps1 -Publisher "CN=<Partner Center Publisher ID>"
+```
+
+Output: `dist\msix\RunCatLumina-VERSION-x64.msix` (+ test `.cer`).
+Package logos are generated with `python3 packaging/windows/generate_assets.py`.
+CI builds: GitHub Actions workflow `msix`.
+
+Store publishing guide:
+
+- `docs/PARTNER-CENTER.md` — account, Publisher string, name reservation
+- `docs/STORE-SUBMISSION.md` — step-by-step submission runbook
+- `docs/STORE-LISTING.md` — paste-ready listing copy + asset checklist
+- `docs/STORE-PRIVACY-POLICY.md` — privacy policy for the listing URL
+
+
 ## Windows deploy
 
 1. Install Python 3 from https://www.python.org/downloads/

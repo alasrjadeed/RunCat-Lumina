@@ -70,6 +70,9 @@ Build zip/tarball packages:
 bash scripts/package-all.sh
 ```
 
+Microsoft Store (MSIX) package: `scripts\windows\build-msix.bat` on Windows
+(see `DEPLOY.md` → *Microsoft Store (MSIX)*, full publishing guide in `docs/`)
+
 Full packaging and install steps: `DEPLOY.md`
 
 Change color from the tray menu, or set `cat_color` in `config.json`.
