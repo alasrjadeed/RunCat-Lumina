@@ -2,9 +2,13 @@
 build/gui/
 build/store/
 build/msix-stage/
+build/linux/
+build/macos/
 dist/gui/
 dist/installer/
 dist/msix/
 dist/store/
+dist/unix/
+packaging/macos/AppIcon.icns
 __pycache__/
 *.pyc
