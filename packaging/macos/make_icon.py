@@ -4,7 +4,7 @@
 The .icns itself is assembled by macOS' iconutil:
 
     python3 packaging/macos/make_icon.py
-    iconutil -c icns build/macos/iconset -o packaging/macos/AppIcon.icns
+    iconutil -c icns build/macos/RunCatLumina.iconset -o packaging/macos/AppIcon.icns
 """
 import sys
 from pathlib import Path
@@ -17,7 +17,7 @@ LOGICAL_SIZES = [16, 32, 128, 256, 512]
 
 
 def main() -> None:
-    out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "build" / "macos" / "iconset"
+    out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "build" / "macos" / "RunCatLumina.iconset"
     out.mkdir(parents=True, exist_ok=True)
 
     src = Image.open(ROOT / "resources" / "icon.png").convert("RGBA")

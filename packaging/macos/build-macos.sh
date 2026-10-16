@@ -14,9 +14,9 @@ BUILD="$ROOT/build/macos"
 mkdir -p "$OUT"
 
 echo "Building app icon (version $VERSION)..."
-rm -rf "$BUILD/iconset"
-python3 packaging/macos/make_icon.py "$BUILD/iconset"
-iconutil -c icns "$BUILD/iconset" -o packaging/macos/AppIcon.icns
+rm -rf "$BUILD/RunCatLumina.iconset"
+python3 packaging/macos/make_icon.py "$BUILD/RunCatLumina.iconset"
+iconutil -c icns "$BUILD/RunCatLumina.iconset" -o packaging/macos/AppIcon.icns
 echo "Wrote packaging/macos/AppIcon.icns"
 
 PYEXE="$(python3 -c 'import sys; print(sys.executable)')"
