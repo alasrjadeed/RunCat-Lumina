@@ -129,6 +129,19 @@ Install location: `%LOCALAPPDATA%\RunCatLumina`
 
 ## Linux deploy
 
+### Option A - standalone package (no Python needed)
+
+Download `RunCatLumina-VERSION-linux-x86_64.tar.gz` from
+https://github.com/alasrjadeed/RunCat-Lumina/releases, then:
+
+```bash
+tar -xzf RunCatLumina-VERSION-linux-x86_64.tar.gz
+cd RunCatLumina-VERSION-linux-x86_64
+bash scripts/linux/install.sh
+```
+
+### Option B - from source
+
 1. Install Python 3 and venv, for example:
    - Debian / Ubuntu: `sudo apt install python3 python3-venv python3-pip`
    - Fedora: `sudo dnf install python3 python3-pip`
@@ -162,6 +175,17 @@ Desktop file: `~/.local/share/applications/runcat-lumina.desktop`
 If the tray icon does not appear on GNOME, install an AppIndicator extension.
 
 ## macOS deploy
+
+### Option A - standalone app (no Python needed)
+
+Download `RunCatLumina-VERSION-macos-<arch>.dmg` from
+https://github.com/alasrjadeed/RunCat-Lumina/releases, open it and drag
+**RunCat Lumina.app** into Applications.
+
+The app is ad-hoc signed but not notarized yet, so the first launch needs
+**right-click > Open** (or System Settings > Privacy & Security > Open Anyway).
+
+### Option B - from source
 
 1. Install Python 3 from https://www.python.org/downloads/macos/ or Homebrew: `brew install python`
 2. Extract `RunCatLumina-VERSION-macos.tar.gz`
@@ -230,3 +254,13 @@ Or edit `config.json` next to `main.py`:
 | macOS | `scripts/macos/start.sh` | `scripts/macos/install.sh` | `scripts/macos/uninstall.sh` | `scripts/macos/package.sh` |
 
 All platforms: `scripts/package-all.sh`
+
+Standalone binary packages (no Python on the target machine):
+
+| OS | Build script | Output |
+| --- | --- | --- |
+| Linux | `packaging/linux/build-linux.sh` | `dist/unix/RunCatLumina-VERSION-linux-x86_64.tar.gz` |
+| macOS | `packaging/macos/build-macos.sh` | `dist/unix/RunCatLumina-VERSION-macos-ARCH.dmg` |
+
+The `release-unix` GitHub Actions workflow builds both and attaches them to the
+GitHub release.

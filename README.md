@@ -78,6 +78,13 @@ Windows installer (no Python needed): download
 https://github.com/alasrjadeed/RunCat-Lumina/releases — built with
 `scripts\windows\build-installer.bat`
 
+Linux (no Python needed): `RunCatLumina-<version>-linux-x86_64.tar.gz` from the
+same releases page → extract then `bash scripts/linux/install.sh`
+
+macOS (no Python needed): `RunCatLumina-<version>-macos-<arch>.dmg` → open and
+drag RunCat Lumina.app to Applications (right-click → Open on first launch, the
+app is not notarized yet)
+
 Full packaging and install steps: `DEPLOY.md`
 
 Change color from the tray menu, or set `cat_color` in `config.json`.
