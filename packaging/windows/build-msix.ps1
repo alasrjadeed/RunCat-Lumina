@@ -211,3 +211,8 @@ Write-Host '  1. Import the .cer into Cert:\LocalMachine\TrustedPeople (or trust
 Write-Host '  2. Enable Settings > Privacy & security > For developers > Developer Mode'
 Write-Host "  3. Add-AppxPackage -Path `"$msixPath`""
 Write-Host 'Partner Center upload: pass -Publisher with your exact Partner Center Publisher string.'
+
+# Success. Reset the exit code left behind by the non-fatal `signtool verify`
+# (self-signed chain) so wrapper shells that end with `exit $LASTEXITCODE`
+# (GitHub Actions pwsh) see 0 instead of 1.
+$global:LASTEXITCODE = 0
