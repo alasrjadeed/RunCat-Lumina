@@ -8,6 +8,15 @@ import os
 from pathlib import Path
 
 
+def force_utf8_stdio():
+    """Keep ✓/✗ output working when stdout is a pipe (Windows uses cp1252 there)."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError, OSError):
+            pass
+
+
 def run_test_file(test_file):
     """Run a single test file and return success status"""
     print(f"\n{'='*50}")
@@ -15,11 +24,15 @@ def run_test_file(test_file):
     print('='*50)
 
     try:
+        env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
         result = subprocess.run(
             [sys.executable, str(test_file)],
             cwd=test_file.parent.parent,
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
+            env=env,
             timeout=30
         )
 
@@ -38,6 +51,7 @@ def run_test_file(test_file):
 
 def main():
     """Run all test files"""
+    force_utf8_stdio()
     tests_dir = Path(__file__).parent
     test_files = list(tests_dir.glob("test_*.py"))
 
