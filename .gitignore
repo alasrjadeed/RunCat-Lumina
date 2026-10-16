@@ -1,0 +1,10 @@
+# Build and packaging artifacts
+build/gui/
+build/store/
+build/msix-stage/
+dist/gui/
+dist/installer/
+dist/msix/
+dist/store/
+__pycache__/
+*.pyc

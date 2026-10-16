@@ -1,0 +1,81 @@
+name: release-windows
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Existing tag to publish the installer to (empty = build artifact only)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Run tests
+        run: python tests/run_tests.py
+
+      - name: Build executable (windowed, no UPX)
+        run: python -m PyInstaller --noconfirm --distpath dist/gui --workpath build/gui RunCat-Lumina.store.spec
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $version = (Get-Content VERSION -Raw).Trim()
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $tag = "${{ github.ref_name }}"
+            if ($tag -ne "v$version") {
+              throw "Tag $tag does not match VERSION $version - bump VERSION or fix the tag."
+            }
+          }
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { $iscc = "$env:ProgramFiles\Inno Setup 6\ISCC.exe" }
+          if (-not (Test-Path $iscc)) { throw "ISCC.exe not found after installing Inno Setup." }
+          & $iscc "/DAppVersion=$version" "/DExePath=$PWD\dist\gui\RunCat-Lumina.exe" "packaging\windows\installer\RunCatLumina.iss"
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup compilation failed." }
+          Get-ChildItem dist\installer
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RunCatLumina-Setup
+          path: dist/installer/*.exe
+          if-no-files-found: error
+
+      - name: Publish GitHub release
+        if: github.ref_type == 'tag' || inputs.release_tag != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="${{ inputs.release_tag }}"
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/installer/*.exe --clobber
+          else
+            gh release create "$TAG" dist/installer/*.exe \
+              --title "$(tr -d '[:space:]' < VERSION)" \
+              --generate-notes
+          fi

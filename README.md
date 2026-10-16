@@ -73,6 +73,11 @@ bash scripts/package-all.sh
 Microsoft Store (MSIX) package: `scripts\windows\build-msix.bat` on Windows
 (see `DEPLOY.md` → *Microsoft Store (MSIX)*, full publishing guide in `docs/`)
 
+Windows installer (no Python needed): download
+`RunCatLumina-<version>-Setup.exe` from
+https://github.com/alasrjadeed/RunCat-Lumina/releases — built with
+`scripts\windows\build-installer.bat`
+
 Full packaging and install steps: `DEPLOY.md`
 
 Change color from the tray menu, or set `cat_color` in `config.json`.

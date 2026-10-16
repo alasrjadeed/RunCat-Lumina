@@ -8,6 +8,7 @@ Reads resources/icon.png (256x256 RGBA) and writes:
   packaging/windows/msix/Assets/Square150x150Logo.png  150x150
   packaging/windows/msix/Assets/Wide310x150Logo.png    310x150
   packaging/windows/store-assets/ProductLogo-512.png   512x512 (Store listing)
+  packaging/windows/installer/setup.ico                multi-size (installer icon)
 
 Tiles keep ~10% padding around the icon (Microsoft tile guidance); the
 Store listing logo is full-bleed. Run from the repo root:
@@ -22,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "resources" / "icon.png"
 MSIX_ASSETS = ROOT / "packaging" / "windows" / "msix" / "Assets"
 STORE_ASSETS = ROOT / "packaging" / "windows" / "store-assets"
+INSTALLER_ASSETS = ROOT / "packaging" / "windows" / "installer"
 
 PAD = 0.8  # fraction of the tile the icon occupies on tiles
 
@@ -49,6 +51,7 @@ def wide(w, h, icon_h):
 def main():
     MSIX_ASSETS.mkdir(parents=True, exist_ok=True)
     STORE_ASSETS.mkdir(parents=True, exist_ok=True)
+    INSTALLER_ASSETS.mkdir(parents=True, exist_ok=True)
 
     outputs = {
         MSIX_ASSETS / "StoreLogo.png": fit(50, pad=False),
@@ -60,6 +63,11 @@ def main():
     for path, image in outputs.items():
         image.save(path, "PNG")
         print(f"wrote {path.relative_to(ROOT)} {image.size}")
+
+    ico = Image.open(SOURCE).convert("RGBA")
+    ico_path = INSTALLER_ASSETS / "setup.ico"
+    ico.save(ico_path, sizes=[(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
+    print(f"wrote {ico_path.relative_to(ROOT)} (multi-size ico)")
 
 
 if __name__ == "__main__":

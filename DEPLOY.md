@@ -84,6 +84,25 @@ Store publishing guide:
 - `docs/STORE-LISTING.md` — paste-ready listing copy + asset checklist
 - `docs/STORE-PRIVACY-POLICY.md` — privacy policy for the listing URL
 
+## Windows installer (EXE)
+
+Download `RunCatLumina-VERSION-Setup.exe` from
+https://github.com/alasrjadeed/RunCat-Lumina/releases and run it — **no Python
+required**. The installer is per-user (no administrator rights), installs to
+`%LOCALAPPDATA%\Programs\RunCat Lumina`, creates a Start menu entry, and offers
+"start when I sign in".
+
+Build it locally (requires [Inno Setup 6](https://jrsoftware.org/isdl.php)):
+
+```bat
+scripts\windows\build-installer.bat
+```
+
+Output: `dist\installer\RunCatLumina-VERSION-Setup.exe`.
+
+CI: the **release-windows** GitHub Actions workflow builds the windowed
+executable plus the installer and attaches the setup file to the GitHub release
+when a `v*` tag is pushed.
 
 ## Windows deploy
 
